@@ -79,7 +79,38 @@ https://github.com/samsonjs/strftime
 
 var net = require('net');
 
-//going the strftime route?
-//var strftime = require('strftime');
+function zeroPad(input) {
+	if (input < 10) {
+		return '0' + input.toString();
+	} else {
+		return input.toString();
+	}
+}
+
+function currentDateString() {
+	var date = new Date();
+	//YYYY
+	var str = date.getFullYear().toString();
+	//YYYY-MM
+	str += '-' + zeroPad(date.getMonth() +1);
+	//YYYY-MM-DD
+	str += '-' + zeroPad(date.getDate());
+	//YYYY-MM-DD hh
+	str += ' ' + zeroPad(date.getHours());
+	//YYYY-MM-DD hh:mm
+	str += ':' + zeroPad(date.getMinutes()) + '\n';
+	return str;
+}
+
+
+function socketHandler (socket) {
+	// socket handling logic
+	socket.end(currentDateString());
+}
+
+var server = net.createServer(
+	socketHandler
+).listen(process.argv[2]);
+
 
 //end of program
